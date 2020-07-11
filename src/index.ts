@@ -72,7 +72,6 @@ export const activate = () => {
 };
 
 const getPresence = (startTimeStamp: number | Date): Presence => {
-	let wspace = `Workspace: ${workspace.root.split("/").pop()}`;
 	let presence: Presence = {
 		startTimestamp: startTimeStamp,
 		smallImageKey: "nvim",
@@ -96,13 +95,12 @@ const getPresence = (startTimeStamp: number | Date): Presence => {
 
 	let ext = fileName.split(".");
 
-	presence.state = wspace;
+	presence.state = `Workspace: ${workspace.root.split("/").pop()}`;
 	presence.details = `Editing ${fileName}`;
 
 	if (ext.length > 1) {
 		ext = ext.slice(1, ext.length);
 		if (fileName[0] == ".") {
-			ext = ext.slice(1, ext.length);
 			ext[0] = "." + ext[0];
 		}
 	}
