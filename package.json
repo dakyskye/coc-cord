@@ -1,0 +1,50 @@
+{
+	"name": "coc-cord",
+	"version": "0.1.0",
+	"description": "An extension of coc to get Discord Rich Presence integration with NeoVim",
+	"private": false,
+	"main": "lib/index.js",
+	"homepage": "https://github.com/dakyskye/coc-cord",
+	"author": {
+		"name": "Lasha Kanteladze",
+		"email": "kanteladzelasha339@gmail.com",
+		"url": "https://github.com/dakyskye"
+	},
+	"repository": {
+		"url": "https://github.com/dakyskye/coc-cord",
+		"type": "git"
+	},
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/dakyskye/coc-cord/issues"
+	},
+	"keywords": [
+		"discord",
+		"rich",
+		"presence",
+		"rich presence",
+		"rpc",
+		"neovim",
+		"nvim",
+		"coc",
+		"coc.nvim"
+	],
+	"engines": {
+		"coc": ">=0.0.77"
+	},
+	"scripts": {
+		"clean": "rm -rf lib/*",
+		"prettify": "npx prettier --write src/*.ts",
+		"build": "tsc"
+	},
+	"dependencies": {
+		"discord-rpc": "discordjs/RPC"
+	},
+	"devDependencies": {
+		"@types/discord-rpc": "^3.0.4",
+		"@types/node": "^14.0.22",
+		"coc.nvim": "0.0.77",
+		"prettier": "^2.0.5",
+		"typescript": "^3.9.6"
+	}
+}
