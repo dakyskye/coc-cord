@@ -14,13 +14,36 @@ type language = {
 
 let languages: Array<language> = [];
 
+languages.push({
+	name: "LICENSE",
+	fileName: "license",
+	extension: "",
+	extensionAliases: ["txt", "md", "html", "asciidoc"],
+	assetName: "license"
+});
+languages.push({
+	name: "LICENSE",
+	fileName: "LICENSE",
+	extension: "",
+	extensionAliases: ["txt", "md", "html", "asciidoc"],
+	assetName: "license"
+});
+languages.push({
+	name: "Prettier",
+	fileName: ".prettierrc",
+	extension: "json",
+	extensionAliases: ["yml", "yaml", "toml", "js", "config.js"],
+	assetName: "prettier"
+});
 languages.push({ name: "C language", extension: "c", assetName: "c" });
 languages.push({ name: "CMake", fileName: "CMake", extension: "txt", assetName: "cmake" });
+languages.push({ name: "Config", extension: "conf", assetName: "config" });
 languages.push({ name: "C++", extension: "cpp", extensionAliases: ["cc"], assetName: "cpp" });
 languages.push({ name: "CSS", extension: "css", assetName: "css" });
 languages.push({ name: "Docker", fileName: "Dockerfile", extension: "", assetName: "docker" });
 languages.push({ name: "Docker", fileName: "docker-compose", extension: "yml", assetName: "docker" });
 languages.push({ name: "Docker", fileName: ".dockerignore", extension: "", assetName: "docker" });
+languages.push({ name: "EditorConfig", fileName: ".editorconfig", extension: "", assetName: "editorconfig" });
 languages.push({ name: "Git", fileName: ".gitignore", extension: "", assetName: "git" });
 languages.push({ name: "Golang", fileName: "go", extension: "mod", assetName: "golang" });
 languages.push({ name: "Golang", fileName: "go", extension: "sum", assetName: "golang" });
@@ -37,13 +60,6 @@ languages.push({ name: "GNU Make", fileName: "Makefile", extension: "", assetNam
 languages.push({ name: "Markdown", extension: "md", extensionAliases: ["MD"], assetName: "markdown" });
 languages.push({ name: "PowerShell", extension: "ps1", assetName: "powershell" });
 languages.push({ name: "Prettier", fileName: ".prettierrc", extension: "", assetName: "prettier" });
-languages.push({
-	name: "Prettier",
-	fileName: ".prettierrc",
-	extension: "json",
-	extensionAliases: ["yml", "yaml", "toml", "js", "config.js"],
-	assetName: "prettier"
-});
 languages.push({ name: "Python", extension: "py", assetName: "python" });
 languages.push({ name: "Ruby", extension: "rb", assetName: "ruby" });
 languages.push({ name: "Rust", extension: "rs", assetName: "rust" });
@@ -100,21 +116,30 @@ const getPresence = (startTimeStamp: number | Date): Presence => {
 
 	if (ext.length > 1) {
 		ext = ext.slice(1, ext.length);
-		if (fileName[0] == ".") {
+		if (fileName[0] === ".") {
 			ext[0] = "." + ext[0];
 		}
 	}
 
+	const getFileName = (lang: language): string => (lang.extension === "" ? lang.fileName! : lang.fileName + "." + lang.extension);
+	const isAliasedExtensionForFile = (lang: language) => lang.extensionAliases?.find((aExt) => lang.fileName + "." + aExt === fileName);
+	const isAliasedExtension = (lang: language) => lang.extensionAliases?.find((aExt) => aExt === ext[0]);
+
 	const lang = languages.find((l) => {
-		if (l.fileName) {
-			let fName: string = l.extension === "" ? l.fileName : l.fileName + "." + l.extension;
-			if (fileName == fName || l.extensionAliases?.find((aExt) => l.fileName + "." + aExt == fileName)) {
-				return l;
-			}
-		} else {
-			if (l.extension == ext[0] || l.extension == ext.join(".") || l.extensionAliases?.find((aExt) => aExt == ext[0])) {
-				return l;
-			}
+		if (l.fileName && fileName === getFileName(l)) {
+			return l;
+		}
+		if (l.fileName && isAliasedExtensionForFile(l)) {
+			return l;
+		}
+		if (!l.fileName && l.extension === ext[0]) {
+			return l;
+		}
+		if (!l.fileName && l.extension === ext.join(".")) {
+			return l;
+		}
+		if (!l.fileName && isAliasedExtension(l)) {
+			return l;
 		}
 	});
 
