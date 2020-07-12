@@ -104,31 +104,27 @@ const getPresence = (startTimeStamp: number | Date): Presence => {
 			ext[0] = "." + ext[0];
 		}
 	}
-	for (let lang of languages) {
-		const assignValues = () => {
-			presence.largeImageKey = lang.assetName;
-			presence.largeImageText = lang.name;
-			presence.details = `Editing ${fileName}`;
-		};
 
-		if (lang.fileName) {
-			let fName: string = "";
-			if (lang.extension == "") {
-				fName = lang.fileName;
-			} else {
-				fName = lang.fileName + "." + lang.extension;
-			}
-			if (fileName == fName || lang.extensionAliases?.find((aExt) => lang.fileName + "." + aExt == fileName)) {
-				assignValues();
-				break;
+	const lang = languages.find((l) => {
+		if (l.fileName) {
+			let fName: string = l.extension === "" ? l.fileName : l.fileName + "." + l.extension;
+			if (fileName == fName || l.extensionAliases?.find((aExt) => l.fileName + "." + aExt == fileName)) {
+				return l;
 			}
 		} else {
-			if (lang.extension == ext[0] || lang.extension == ext.join(".") || lang.extensionAliases?.find((aExt) => aExt == ext[0])) {
-				assignValues();
-				break;
+			if (l.extension == ext[0] || l.extension == ext.join(".") || l.extensionAliases?.find((aExt) => aExt == ext[0])) {
+				return l;
 			}
 		}
+	});
+
+	if (!lang) {
+		return presence;
 	}
+
+	presence.largeImageKey = lang.assetName;
+	presence.largeImageText = lang.name;
+	presence.details = `Editing ${fileName}`;
 
 	return presence;
 };
