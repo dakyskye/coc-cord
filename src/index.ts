@@ -1,161 +1,19 @@
-import { Client, Presence } from "discord-rpc";
-import { workspace } from "coc.nvim";
+import { Client } from "./client/client";
+import { LOG, LogLevel } from "./logger/logger";
+import { ExtensionContext } from "coc.nvim";
 
 const clientID: string = "731545228539985940";
-const client: Client = new Client({ transport: "ipc" });
 
-type language = {
-	name: string;
-	fileName?: string;
-	extension: string;
-	extensionAliases?: Array<string>;
-	assetName: string;
+const client: Client = new Client(clientID);
+
+export const activate = async (ctx: ExtensionContext) => {
+	LOG(LogLevel.Info, "extension activated, trying to connect to Discord gateway");
+	await client.connect(ctx);
 };
 
-let languages: Array<language> = [];
-
-languages.push({
-	name: "LICENSE",
-	fileName: "license",
-	extension: "",
-	extensionAliases: ["txt", "md", "html", "asciidoc"],
-	assetName: "license"
-});
-languages.push({
-	name: "LICENSE",
-	fileName: "LICENSE",
-	extension: "",
-	extensionAliases: ["txt", "md", "html", "asciidoc"],
-	assetName: "license"
-});
-languages.push({
-	name: "Prettier",
-	fileName: ".prettierrc",
-	extension: "json",
-	extensionAliases: ["yml", "yaml", "toml", "js", "config.js"],
-	assetName: "prettier"
-});
-languages.push({ name: "C language", extension: "c", assetName: "c" });
-languages.push({ name: "CMake", fileName: "CMake", extension: "txt", assetName: "cmake" });
-languages.push({ name: "Config", extension: "conf", assetName: "config" });
-languages.push({ name: "C++", extension: "cpp", extensionAliases: ["cc"], assetName: "cpp" });
-languages.push({ name: "CSS", extension: "css", assetName: "css" });
-languages.push({ name: "Docker", fileName: "Dockerfile", extension: "", assetName: "docker" });
-languages.push({ name: "Docker", fileName: "docker-compose", extension: "yml", assetName: "docker" });
-languages.push({ name: "Docker", fileName: ".dockerignore", extension: "", assetName: "docker" });
-languages.push({ name: "EditorConfig", fileName: ".editorconfig", extension: "", assetName: "editorconfig" });
-languages.push({ name: "Git", fileName: ".gitignore", extension: "", assetName: "git" });
-languages.push({ name: "Golang", fileName: "go", extension: "mod", assetName: "golang" });
-languages.push({ name: "Golang", fileName: "go", extension: "sum", assetName: "golang" });
-languages.push({ name: "Golang", extension: "go", assetName: "golang" });
-languages.push({ name: "Golang", fileName: "go", extension: "mod", assetName: "golang" });
-languages.push({ name: "C language", extension: "h", assetName: "h" });
-languages.push({ name: "C++", extension: "hpp", assetName: "hpp" });
-languages.push({ name: "HTML", extension: "html", assetName: "html" });
-languages.push({ name: "JavaScript", extension: "js", assetName: "javascript" });
-languages.push({ name: "JavaScript React", extension: "jsx", assetName: "javascriptx" });
-languages.push({ name: "JSON", extension: "json", assetName: "json" });
-languages.push({ name: "GNU Make", fileName: "makefile", extension: "", assetName: "makefile" });
-languages.push({ name: "GNU Make", fileName: "Makefile", extension: "", assetName: "makefile" });
-languages.push({ name: "Markdown", extension: "md", extensionAliases: ["MD"], assetName: "markdown" });
-languages.push({ name: "PowerShell", extension: "ps1", assetName: "powershell" });
-languages.push({ name: "Prettier", fileName: ".prettierrc", extension: "", assetName: "prettier" });
-languages.push({ name: "Python", extension: "py", assetName: "python" });
-languages.push({ name: "Ruby", extension: "rb", assetName: "ruby" });
-languages.push({ name: "Rust", extension: "rs", assetName: "rust" });
-languages.push({ name: "SASS", extension: "sass", assetName: "sass" });
-languages.push({ name: "SCSS", extension: "scss", assetName: "scss" });
-languages.push({ name: "Shell", extension: "sh", extensionAliases: ["bash", "zsh", "fish", "ksh"], assetName: "shell" });
-languages.push({ name: "SQL", extension: "sql", assetName: "sql" });
-languages.push({ name: "TypeScript", extension: "ts", assetName: "typescript" });
-languages.push({ name: "TypeScript Declaration", extension: "d.ts", assetName: "typescript_d" });
-languages.push({ name: "TypeScript React", extension: "tsx", assetName: "typescriptx" });
-languages.push({ name: "Vim", extension: "vim", assetName: "vim" });
-languages.push({ name: "Vue", extension: "vue", assetName: "vue" });
-languages.push({ name: "YAML", extension: "yaml", extensionAliases: ["yml"], assetName: "yaml" });
-
-export const activate = () => {
-	client.connect(clientID);
-	client.login({ clientId: clientID });
-
-	const startTimeStamp = new Date();
-
-	client.on("ready", () => {
-		setInterval(() => {
-			client.setActivity(getPresence(startTimeStamp));
-		}, 1000);
-	});
+export const deactivate = async () => {
+	LOG(LogLevel.Info, "extension deactivated, trying to disconnect from Discord gateway");
+	return await client.disconnect();
 };
 
-const getPresence = (startTimeStamp: number | Date): Presence => {
-	let presence: Presence = {
-		startTimestamp: startTimeStamp,
-		smallImageKey: "nvim",
-		smallImageText: "NeoVim text editor"
-	};
-
-	let idlingPresence: Presence = { largeImageKey: "nvim", largeImageText: "NeoVim text editor", state: undefined, details: "idling" };
-
-	presence = { ...presence, ...idlingPresence };
-
-	let doc = workspace.getDocument(workspace.uri);
-	if (!doc) {
-		return presence;
-	}
-
-	let fileName = doc.uri.split("/").pop();
-
-	if (!fileName) {
-		return presence;
-	}
-
-	let ext = fileName.split(".");
-
-	presence.state = `Workspace: ${workspace.root.split("/").pop()}`;
-	presence.details = `Editing ${fileName}`;
-
-	if (ext.length > 1) {
-		ext = ext.slice(1, ext.length);
-		if (fileName[0] === ".") {
-			ext[0] = "." + ext[0];
-		}
-	}
-
-	const getFileName = (lang: language): string => (lang.extension === "" ? lang.fileName! : lang.fileName + "." + lang.extension);
-	const isAliasedExtensionForFile = (lang: language) => lang.extensionAliases?.find((aExt) => lang.fileName + "." + aExt === fileName);
-	const isAliasedExtension = (lang: language) => lang.extensionAliases?.find((aExt) => aExt === ext[0]);
-
-	const lang = languages.find((l) => {
-		if (l.fileName && fileName === getFileName(l)) {
-			return l;
-		}
-		if (l.fileName && isAliasedExtensionForFile(l)) {
-			return l;
-		}
-		if (!l.fileName && l.extension === ext[0]) {
-			return l;
-		}
-		if (!l.fileName && l.extension === ext.join(".")) {
-			return l;
-		}
-		if (!l.fileName && isAliasedExtension(l)) {
-			return l;
-		}
-	});
-
-	if (!lang) {
-		return presence;
-	}
-
-	presence.largeImageKey = lang.assetName;
-	presence.largeImageText = lang.name;
-	presence.details = `Editing ${fileName}`;
-
-	return presence;
-};
-
-export const deactivate = () => {
-	client.destroy();
-};
-
-process.on("unhandledRejection", (err) => workspace.createOutputChannel("Discord").appendLine(err as string));
+process.on("unhandledRejection", (err) => LOG(LogLevel.Err, err as string));
