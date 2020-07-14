@@ -29,10 +29,12 @@ langs.push({
 	extensionAliases: ["yml", "yaml", "toml", "js", "config.js"],
 	assetName: "prettier"
 });
+langs.push({ name: "TypeScript config", fileName: "tsconfig", extension: "json", assetName: "tsconfig" });
 langs.push({ name: "C language", extension: "c", assetName: "c" });
 langs.push({ name: "CMake", fileName: "CMake", extension: "txt", assetName: "cmake" });
 langs.push({ name: "Config", extension: "conf", assetName: "config" });
 langs.push({ name: "C++", extension: "cpp", extensionAliases: ["cc"], assetName: "cpp" });
+langs.push({ name: "C#", extension: "cs", assetName: "csharp" });
 langs.push({ name: "CSS", extension: "css", assetName: "css" });
 langs.push({ name: "Docker", fileName: "Dockerfile", extension: "", assetName: "docker" });
 langs.push({ name: "Docker", fileName: "docker-compose", extension: "yml", assetName: "docker" });
@@ -45,6 +47,7 @@ langs.push({ name: "Golang", extension: "go", assetName: "golang" });
 langs.push({ name: "Golang", fileName: "go", extension: "mod", assetName: "golang" });
 langs.push({ name: "C language", extension: "h", assetName: "h" });
 langs.push({ name: "C++", extension: "hpp", assetName: "hpp" });
+langs.push({ name: "INI", extension: "ini", assetName: "config" });
 langs.push({ name: "HTML", extension: "html", assetName: "html" });
 langs.push({ name: "JavaScript", extension: "js", assetName: "javascript" });
 langs.push({ name: "JavaScript React", extension: "jsx", assetName: "javascriptx" });
@@ -61,6 +64,7 @@ langs.push({ name: "SASS", extension: "sass", assetName: "sass" });
 langs.push({ name: "SCSS", extension: "scss", assetName: "scss" });
 langs.push({ name: "Shell", extension: "sh", extensionAliases: ["bash", "zsh", "fish", "ksh"], assetName: "shell" });
 langs.push({ name: "SQL", extension: "sql", assetName: "sql" });
+langs.push({ name: "TOML", extension: "toml", assetName: "toml" });
 langs.push({ name: "TypeScript", extension: "ts", assetName: "typescript" });
 langs.push({ name: "TypeScript Declaration", extension: "d.ts", assetName: "typescript_d" });
 langs.push({ name: "TypeScript React", extension: "tsx", assetName: "typescriptx" });
