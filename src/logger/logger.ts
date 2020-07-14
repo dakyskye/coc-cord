@@ -7,20 +7,18 @@ export enum LogLevel {
 }
 
 export const LOG = (level: LogLevel, message: string) => {
-	let lvl: string | undefined;
 	switch (level) {
 		case LogLevel.Info: {
-			lvl = "more";
+			workspace.showMessage(`coc-cord: ${message}`, "more");
 		}
 		case LogLevel.Warn: {
-			lvl = "warning";
+			workspace.showMessage(`coc-cord: ${message}`, "warning");
 		}
 		case LogLevel.Err: {
-			lvl = "error";
+			workspace.showMessage(`coc-cord: ${message}`, "error");
 		}
 		default: {
-			lvl = undefined;
+			workspace.showMessage(`coc-cord: ${message}`, undefined);
 		}
 	}
-	workspace.showMessage(`coc-cord: ${message}`, lvl);
 };
