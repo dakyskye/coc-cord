@@ -44,6 +44,7 @@ langs.push({ name: "C language", extension: "c", assetName: "c" });
 langs.push({ name: "CMake", fileName: "CMake", extension: "txt", assetName: "cmake" });
 langs.push({ name: "Config", extension: "conf", assetName: "config" });
 langs.push({ name: "C++", extension: "cpp", extensionAliases: ["cc", "cxx"], assetName: "cpp" });
+langs.push({ name: "Crystal", extension: "cr", assetName: "crystal" });
 langs.push({ name: "C#", extension: "cs", assetName: "csharp" });
 langs.push({ name: "CSProj", extension: "csproj", assetName: "csproj" });
 langs.push({ name: "CSS", extension: "css", assetName: "css" });
@@ -69,6 +70,7 @@ langs.push({ name: "JavaScript React", extension: "jsx", assetName: "javascriptx
 langs.push({ name: "JSON", extension: "json", assetName: "json" });
 langs.push({ name: "Kotlin", extension: "kt", extensionAliases: ["kts", "ktm"], assetName: "kotlin" });
 langs.push({ name: "Lua", extension: "lua", assetName: "lua" });
+langs.push({ name: "Julia", extension: "jl", assetName: "julia" });
 langs.push({ name: "GNU Make", fileName: "makefile", extension: "", assetName: "makefile" });
 langs.push({ name: "GNU Make", fileName: "Makefile", extension: "", assetName: "makefile" });
 langs.push({ name: "Markdown", extension: "md", extensionAliases: ["MD"], assetName: "markdown" });
