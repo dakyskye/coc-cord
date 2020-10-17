@@ -1,6 +1,6 @@
 {
 	"name": "coc-cord",
-	"version": "0.5.0",
+	"version": "0.5.1",
 	"description": "An extension of coc to get Discord Rich Presence integration with NeoVim",
 	"private": false,
 	"main": "lib/index.js",
@@ -18,17 +18,7 @@
 	"bugs": {
 		"url": "https://github.com/dakyskye/coc-cord/issues"
 	},
-	"keywords": [
-		"discord",
-		"rich",
-		"presence",
-		"rich presence",
-		"rpc",
-		"neovim",
-		"nvim",
-		"coc",
-		"coc.nvim"
-	],
+	"keywords": ["discord", "rich", "presence", "rich presence", "rpc", "neovim", "nvim", "coc", "coc.nvim"],
 	"engines": {
 		"coc": ">=0.0.77"
 	},

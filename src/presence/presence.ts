@@ -34,14 +34,13 @@ export const getPresence = (startTimeStamp: number | Date, workspace?: string, f
 	}
 
 	const lang = languages.find((lang) => {
-		const lastExtension = ext[ext.length - 1];
 		if (lang.fileName && fileName === fileNameForLanguage(lang)) {
 			return lang;
 		}
 		if (lang.fileName && isAliasedExtensionForFile(lang, fileName)) {
 			return lang;
 		}
-		if (!lang.fileName && lang.extension === lastExtension) {
+		if (!lang.fileName && lang.extension === ext[ext.length - 1]) {
 			return lang;
 		}
 		if (!lang.fileName && lang.extension === ext.join(".")) {
